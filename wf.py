@@ -47,30 +47,35 @@ class wall_fallow_control():    #沿墙算法
         self.orgy = 0  #机器人初始位置y坐标
 
     def forward(self):
+        print("robot forward")
         vel_msg = Twist()
         vel_msg.linear.x = 1
         vel_msg.angular.z = 0
         cmd_vel_pub.publish(vel_msg)
 
     def back(self):
+        print("robot back")
         vel_msg = Twist()
         vel_msg.linear.x = -1
         vel_msg.angular.z = 0
         cmd_vel_pub.publish(vel_msg)
 
     def turnRight(self):
+        print("robot goRight")
         vel_msg = Twist()
         vel_msg.linear.x = 0
         vel_msg.angular.z = 0.3
         cmd_vel_pub.publish(vel_msg) 
 
     def turnLeft(self):
+        print("robot turnLeft")
         vel_msg = Twist()
         vel_msg.linear.x = 0
         vel_msg.angular.z = -0.3
         cmd_vel_pub.publish(vel_msg)
 
     def stop(self):
+        print("robot stop")
         vel_msg = Twist()
         vel_msg.linear.x = 0              
         vel_msg.angular.z = 0
@@ -85,15 +90,15 @@ class wall_fallow_control():    #沿墙算法
         self.r=min(minR,minRa)
         self.m=minF
        
-        print("dissssssssssssssssssss")
-        print(self.calDis(self.orgx,self.orgy,self.x,self.y))
-        print("x,yyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
-        print(self.orgx,self.orgy)
+        # print("dissssssssssssssssssss")
+        # print(self.calDis(self.orgx,self.orgy,self.x,self.y))
+        # print("x,yyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
+        # print(self.orgx,self.orgy)
 
         if self.calDis(self.orgx,self.orgy,self.x,self.y)<=1.5 and self.count2==1:  #机器人首次距离初始位置大于2米后又运动到距离初始位置小于1.5米的地方，认为机器人已经转了一圈，停止沿墙走
             self.st=0  #机器人停止沿墙走标识
         else:
-            print("self.l={}, self.r={}".format(self.l, self.r))
+            print("self.l = {} , self.r = {}".format(self.l, self.r))
             if self.l<self.dl and self.m>=self.dm and self.r>=self.dr:#2
                 print("in_K=2")
                 if minL<0.2:
@@ -115,7 +120,7 @@ class wall_fallow_control():    #沿墙算法
 
                 self.k=2
                 self.j=0
-                self.fx = 1
+                self.fx = self.fx - 1
                 print("out_K=2")
 
                 if self.count==1:  #机器人初始位置只采集一次
@@ -148,7 +153,8 @@ class wall_fallow_control():    #沿墙算法
                         self.turnLeft()
 
                 self.k=4
-                print("out_K=4")
+                self.fx = self.fx - 1
+               print("out_K=4")
                 
                 if self.count==1:
                     self.orgx=self.x
@@ -167,6 +173,7 @@ class wall_fallow_control():    #沿墙算法
                 self.j=1
                 self.q=1
                 print("out_K=6")
+                input()
 
             elif self.l<self.dl and self.m<self.dm and self.r>=self.dr :#5
                 print("in_K=5")         
@@ -223,6 +230,7 @@ class wall_fallow_control():    #沿墙算法
                         self.turnLeft()
                 self.k=3
                 print("out_K=3")
+                input()
 
             elif self.l>=self.dl and self.m>=self.dm and self.r>=self.dr: #1
                 print("in_K=1")                 
